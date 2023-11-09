@@ -1,17 +1,43 @@
-// Validación del formulario de contacto
-const formulario = document.querySelector('form');
+let carrito = [];
+let total = 0;
 
-formulario.addEventListener('submit', function (event) {
-    event.preventDefault();
-    const nombre = document.getElementById('nombre').value;
-    const correo = document.getElementById('correo').value;
-    const mensaje = document.getElementById('mensaje').value;
+function agregarAlCarrito(productoId) {
+    const producto = {
+        id: productoId,
+        nombre: `Producto ${productoId}`,
+        precio: productoId === 1 ? 20.00 : 25.00
+    };
 
-    if (!nombre || !correo || !mensaje) {
-        alert('Por favor, complete todos los campos del formulario.');
-    } else {
-        // Aquí puedes agregar código para enviar el formulario o realizar otras acciones.
-        alert('Formulario enviado con éxito. Gracias por contactarnos.');
-        formulario.reset();
+    carrito.push(producto);
+    total += producto.precio;
+
+    actualizarCarrito();
+}
+
+function actualizarCarrito() {
+    const carritoList = document.getElementById('carrito');
+    const totalElement = document.getElementById('total');
+
+    carritoList.innerHTML = '';
+    totalElement.textContent = total.toFixed(2);
+
+    carrito.forEach((producto) => {
+        const item = document.createElement('li');
+        item.textContent = `${producto.nombre} - $${producto.precio.toFixed(2)}`;
+        carritoList.appendChild(item);
+    });
+}
+
+function realizarCompra() {
+    if (carrito.length === 0) {
+        alert("Tu carrito está vacío. Agrega productos antes de comprar.");
+        return;
     }
-});
+
+    // Aquí podrías agregar lógica para procesar la compra, como enviar datos a un servidor, gestionar el pago, etc.
+    alert("¡Compra realizada con éxito! Gracias por tu compra.");
+    carrito = [];
+    total = 0;
+    actualizarCarrito();
+}
+
